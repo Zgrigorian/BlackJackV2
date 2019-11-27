@@ -126,5 +126,26 @@ class Hand:
     
     def Check_Can_Split(self):
         return self.n==2 and self.order[0].value==self.order[1].value
-            
-            
+
+class Hand_Stack:
+    def __init__(self):
+        self.stack = [Hand()]
+        self.size=1
+        self.fresh=True
+        self.hasSplit=False
+    
+    def Split(self,i):
+        oldHand=self.stack[i]
+        newHand1=Hand()
+        newHand2=Hand()
+        newHand1.Hit(oldHand.order[0])
+        newHand2.Hit(oldHand.order[1])
+        self.stack[i]=newHand1
+        self.stack.append(newHand2)
+        self.hasSplit=True
+        self.fresh=False
+        self.size=self.size+1
+    
+    def Hit(self,card,i):
+        self.stack[i].Hit(card)
+        self.fresh=False

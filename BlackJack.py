@@ -17,3 +17,4 @@ def Deal_Hand(deck):
     player.Hit(deck.Deal())
     dealer.Hit(deck.Deal())
     return player,dealer
+

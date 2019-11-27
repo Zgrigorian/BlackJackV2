@@ -174,7 +174,37 @@ def testCheckCanSplit():
     print('Hand.Check_Can_Split() n=2, diff result:', not tester2.Check_Can_Split())
     tester2.Hit(card1)
     print('Hand.Check_Can_Split() n=3, 1 pair result:',not tester2.Check_Can_Split())
-#==============================================================================  
+#==============================================================================
+#Testing handStack Functions
+def testGenerateHandStack():
+    tester=PC.Hand_Stack()
+    boo=tester.size==1 and tester.fresh== True and tester.hasSplit==False
+    print('Generate Hand Stack result:', boo)
+    
+def testHandStackHit():
+    tester=PC.Hand_Stack()
+    card=PC.Card('Spade','Eight',8)
+    tester.Hit(card,0)
+    hand1=tester.stack[0]
+    boo=hand1.n==1 and tester.fresh==False
+    print('Hand_Stack.Hit() result:',boo)
+
+def testHandStackSplit():
+    tester=PC.Hand_Stack()
+    card1=PC.Card('Spade','Eight',8)
+    card2=PC.Card('Diamond','Eight',8)
+    tester.Hit(card1,0)
+    tester.Hit(card2,0)
+    tester.Split(0)
+    hand1=tester.stack[0]
+    hand2=tester.stack[1]
+    boo1=hand1.n==1 and hand1.order[0].suit=='Spade'
+    boo2=hand2.n==1 and hand2.order[0].suit=='Diamond'
+    boo3=tester.fresh==False and tester.hasSplit==True
+    print('Hand_Stack.Split() result:',boo1 and boo2 and boo3)
+    
+    
+#==============================================================================
 #Testing Blackjack Functions
 def testNewHand():
     deck=PC.Deck();
@@ -199,3 +229,6 @@ testCheckHasFaceCard()
 testCheckBlackJack()
 testCheckCanSplit()
 testNewHand()
+testGenerateHandStack()
+testHandStackHit()
+testHandStackSplit()

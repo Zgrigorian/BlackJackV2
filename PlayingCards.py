@@ -6,7 +6,7 @@ Created on Tue Nov 26 21:53:25 2019
 """
 
 import random
-import numpy as np
+
 class Card(object):
     def __init__(self,suit='Spade',name='Ace',value=1):
         self.suit = suit
@@ -126,6 +126,21 @@ class Hand:
     
     def Check_Can_Split(self):
         return self.n==2 and self.order[0].value==self.order[1].value
+    
+    def Print_Player(self):
+        print('Your hand consists of:')
+        for i in range(0,self.n):
+            print('the', self.order[i].name, 'of', self.order[i].suit)
+        print('Your hand total is:', self.value)
+        
+    def Print_Dealer(self):
+        print('The Dealer hand consists of:')
+        for i in range(0,self.n):
+            print('the', self.order[i].name, 'of', self.order[i].suit)
+        print('Their hand total is:', self.value)
+        
+    def Print_Dealer_Top(self):
+        print('The Dealer has the', self.order[1].name, 'of', self.order[1].suit, 'face up')
 
 class Hand_Stack:
     def __init__(self):
@@ -133,6 +148,10 @@ class Hand_Stack:
         self.size=1
         self.fresh=True
         self.hasSplit=False
+        self.status = ['Live']
+        self.doubled=[False]
+        self.insurance=False
+        self.first=[True]
     
     def Split(self,i):
         oldHand=self.stack[i]
@@ -145,7 +164,28 @@ class Hand_Stack:
         self.hasSplit=True
         self.fresh=False
         self.size=self.size+1
+        self.status.append('Live')
+        self.first.append(True)
+        self.doubled.append(False)
     
-    def Hit(self,card,i):
+    def Hit(self,card,i=0):
         self.stack[i].Hit(card)
         self.fresh=False
+        self.first[i]=False
+        if self.stack[i].value>21:
+            self.status[i]='Lost'
+    
+    def Print_Player(self,i=0):
+        self.stack[i].Print_Player()
+        
+    def Update_Status(self,Update,i=0):
+        self.status[i] = Update
+        
+    def Check_BlackJack(self,i=0):
+        return self.stack[i].n==2 and self.stack[i].value==21
+    
+    def Check_Can_Split(self,i=0):
+        return self.stack[i].Check_Can_Split()
+    
+    def Has_Ace(self,i=0):
+        return self.stack[i].Has_Ace()
